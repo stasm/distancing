@@ -11,7 +11,7 @@ export function move(Speed: number) {
     return (game: Game, entity: Entity) => {
         game.World.Mask[entity] |= Has.Move;
         game.World.Move[entity] = <Move>{
-            Direction: [1, 1],
+            Direction: [0, 0],
             Speed,
         };
     };
