@@ -22,15 +22,16 @@ export function sys_collide(game: Game, delta: number) {
     }
 
     for (let i = 0; i < all_colliders.length; i++) {
-        check_collisions(all_colliders[i], all_colliders);
+        check_collisions(all_colliders[i], all_colliders, i + 1);
     }
 }
 
-function check_collisions(collider: Collide, colliders: Collide[]) {
-    for (let i = 0; i < colliders.length; i++) {
+function check_collisions(collider: Collide, colliders: Collide[], offset: number) {
+    for (let i = offset; i < colliders.length; i++) {
         let other = colliders[i];
         if (other !== collider && intersect(collider, other)) {
             collider.Collisions.push(other);
+            other.Collisions.push(collider);
         }
     }
 }
