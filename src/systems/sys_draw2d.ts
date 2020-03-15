@@ -5,14 +5,14 @@ import {Game} from "../game.js";
 const QUERY = Has.Transform2D | Has.Draw;
 
 export function sys_draw2d(game: Game, delta: number) {
-    game.Context2D.resetTransform();
-    game.Context2D.fillStyle = game.ClearColor;
-    game.Context2D.fillRect(0, 0, game.ViewportWidth, game.ViewportHeight);
+    game.ContextScene.resetTransform();
+    game.ContextScene.fillStyle = game.ClearColor;
+    game.ContextScene.fillRect(0, 0, game.CanvasScene.width, game.CanvasScene.height);
 
     for (let i = 0; i < game.World.Mask.length; i++) {
         if ((game.World.Mask[i] & QUERY) == QUERY) {
             let transform = game.World.Transform2D[i];
-            game.Context2D.setTransform(
+            game.ContextScene.setTransform(
                 transform.World[0],
                 transform.World[1],
                 transform.World[2],
@@ -32,9 +32,9 @@ export function sys_draw2d(game: Game, delta: number) {
 }
 
 function draw_circle(game: Game, draw: Draw) {
-    game.Context2D.fillStyle = draw.Color;
-    game.Context2D.beginPath();
-    game.Context2D.arc(0, 0, draw.Radius, 0, 2 * Math.PI);
-    game.Context2D.closePath();
-    game.Context2D.fill();
+    game.ContextScene.fillStyle = draw.Color;
+    game.ContextScene.beginPath();
+    game.ContextScene.arc(0, 0, draw.Radius, 0, 2 * Math.PI);
+    game.ContextScene.closePath();
+    game.ContextScene.fill();
 }

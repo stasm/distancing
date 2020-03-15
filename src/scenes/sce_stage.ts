@@ -15,7 +15,7 @@ export function scene_stage(game: Game) {
 
     for (let i = 0; i < game.Population; i++) {
         instantiate(game, {
-            Translation: [float(0, game.ViewportWidth), float(0, game.ViewportHeight)],
+            Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
             Using: [
                 draw_circle(3),
                 collide(3),
@@ -27,7 +27,7 @@ export function scene_stage(game: Game) {
     }
 
     let patient0 = instantiate(game, {
-        Translation: [float(0, game.ViewportWidth), float(0, game.ViewportHeight)],
+        Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
         Using: [
             draw_circle(3),
             collide(3),

@@ -21,8 +21,8 @@ function update(game: Game, entity: Entity) {
         control.Direction[0] = -control.Direction[0];
     }
 
-    if (transform.Translation[0] > game.ViewportWidth) {
-        transform.Translation[0] = game.ViewportWidth;
+    if (transform.Translation[0] > game.CanvasScene.width) {
+        transform.Translation[0] = game.CanvasScene.width;
         control.Direction[0] = -control.Direction[0];
     }
 
@@ -31,8 +31,8 @@ function update(game: Game, entity: Entity) {
         control.Direction[1] = -control.Direction[1];
     }
 
-    if (transform.Translation[1] > game.ViewportHeight) {
-        transform.Translation[1] = game.ViewportHeight;
+    if (transform.Translation[1] > game.CanvasScene.height) {
+        transform.Translation[1] = game.CanvasScene.height;
         control.Direction[1] = -control.Direction[1];
     }
 

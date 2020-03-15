@@ -14,14 +14,14 @@ export type Entity = number;
 export class Game {
     World = new World();
 
-    ViewportWidth = window.innerWidth;
-    ViewportHeight = window.innerHeight;
-
     InputState: Record<string, number> = {};
     InputDelta: Record<string, number> = {};
 
     UI = document.querySelector("main")!;
-    Context2D: CanvasRenderingContext2D;
+    CanvasScene = document.querySelector("canvas#scene")! as HTMLCanvasElement;
+    ContextScene = this.CanvasScene.getContext("2d")!;
+    CanvasHisto = document.querySelector("canvas#histo")! as HTMLCanvasElement;
+    ContextHisto = this.CanvasScene.getContext("2d")!;
     ClearColor = "#222";
 
     Population = 200;
@@ -61,10 +61,10 @@ export class Game {
             this.InputDelta.WheelY = evt.deltaY;
         });
 
-        let canvas2d = document.querySelector("canvas")!;
-        canvas2d.width = this.ViewportWidth;
-        canvas2d.height = this.ViewportHeight;
-        this.Context2D = canvas2d.getContext("2d")!;
+        this.CanvasScene.width = this.CanvasScene.clientWidth;
+        this.CanvasScene.height = this.CanvasScene.clientHeight;
+        this.CanvasHisto.width = this.CanvasHisto.clientWidth;
+        this.CanvasHisto.height = this.CanvasHisto.clientHeight;
     }
 
     FrameReset() {

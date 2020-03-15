@@ -11,11 +11,16 @@
     canvas,
     main {
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        width: 100vw;
+        height: 100vh;
         user-select: none;
+    }
+    canvas#scene {
+        height: 80vh;
+        top: 20vh;
+    }
+    canvas#histo {
+        height: 20vh;
     }
     #debug {
         display: flex;
@@ -42,7 +47,8 @@
     }
 </style>
 <body>
-    <canvas></canvas>
+    <canvas id="histo"></canvas>
+    <canvas id="scene"></canvas>
     <main></main>
 
     <div id="debug">
