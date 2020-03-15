@@ -9,7 +9,7 @@ export interface ControlBall {
 export function control_ball(angle: Rad) {
     return (game: Game, entity: Entity) => {
         game.World.Mask[entity] |= Has.ControlBall;
-        game.World.ControlBall[entity] = <ControlBall>{
+        game.World.ControlBall[entity] = {
             Direction: [Math.cos(angle), Math.sin(angle)],
         };
     };

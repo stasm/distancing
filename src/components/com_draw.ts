@@ -13,13 +13,13 @@ export interface DrawCircle {
     Color: string;
 }
 
-export function draw_circle(radius: number, color: string) {
+export function draw_circle(radius: number) {
     return (game: Game, entity: Entity) => {
         game.World.Mask[entity] |= Has.Draw;
         game.World.Draw[entity] = {
             Kind: DrawKind.Circle,
             Radius: radius,
-            Color: color,
+            Color: "black",
         };
     };
 }

@@ -10,7 +10,7 @@ export interface Move {
 export function move(Speed: number) {
     return (game: Game, entity: Entity) => {
         game.World.Mask[entity] |= Has.Move;
-        game.World.Move[entity] = <Move>{
+        game.World.Move[entity] = {
             Direction: [0, 0],
             Speed,
         };

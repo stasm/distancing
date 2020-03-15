@@ -3,6 +3,7 @@ import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_ball} from "./systems/sys_control_ball.js";
 import {sys_draw2d} from "./systems/sys_draw2d.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
+import {sys_health} from "./systems/sys_health.js";
 import {sys_move} from "./systems/sys_move.js";
 import {sys_transform2d} from "./systems/sys_transform2d.js";
 import {World} from "./world.js";
@@ -72,6 +73,7 @@ export class Game {
         sys_move(this, delta);
         sys_transform2d(this, delta);
         sys_collide(this, delta);
+        sys_health(this, delta);
         sys_draw2d(this, delta);
         sys_framerate(this, delta, performance.now() - now);
     }

@@ -15,7 +15,7 @@ export interface Collide {
 export function collide(radius: number) {
     return (game: Game, entity: Entity) => {
         game.World.Mask[entity] |= Has.Collide;
-        game.World.Collide[entity] = <Collide>{
+        game.World.Collide[entity] = {
             EntityId: entity,
             Radius: radius,
             Center: [0, 0],
