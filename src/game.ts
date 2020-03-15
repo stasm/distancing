@@ -6,6 +6,7 @@ import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_health} from "./systems/sys_health.js";
 import {sys_move} from "./systems/sys_move.js";
 import {sys_transform2d} from "./systems/sys_transform2d.js";
+import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
 
 export type Entity = number;
@@ -22,7 +23,7 @@ export class Game {
     UI = document.querySelector("main")!;
     Context2D: CanvasRenderingContext2D;
 
-    Population = 1000;
+    Population = 100;
     SociallyDistancedRatio = 0.0;
     RecoveryTime = 10;
 
@@ -79,6 +80,7 @@ export class Game {
         sys_collide(this, delta);
         sys_health(this, delta);
         sys_draw2d(this, delta);
+        sys_ui(this, delta);
         sys_framerate(this, delta, performance.now() - now);
     }
 }
