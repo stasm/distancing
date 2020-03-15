@@ -1,27 +1,25 @@
 import {Entity, Game} from "../game.js";
 import {Has} from "./com_index.js";
 
-export type Draw = DrawRect;
+export type Draw = DrawCircle;
 
 export const enum DrawKind {
-    Rect,
+    Circle,
 }
 
-export interface DrawRect {
-    Kind: DrawKind.Rect;
-    Width: number;
-    Height: number;
+export interface DrawCircle {
+    Kind: DrawKind.Circle;
+    Radius: number;
     Color: string;
 }
 
-export function draw_rect(Width: number, Height: number, Color: string) {
+export function draw_circle(radius: number, color: string) {
     return (game: Game, entity: Entity) => {
         game.World.Mask[entity] |= Has.Draw;
         game.World.Draw[entity] = {
-            Kind: DrawKind.Rect,
-            Width,
-            Height,
-            Color,
+            Kind: DrawKind.Circle,
+            Radius: radius,
+            Color: color,
         };
     };
 }

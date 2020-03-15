@@ -1,4 +1,4 @@
-import {DrawKind, DrawRect} from "../components/com_draw.js";
+import {Draw, DrawKind} from "../components/com_draw.js";
 import {Has} from "../components/com_index.js";
 import {Game} from "../game.js";
 
@@ -22,15 +22,18 @@ export function sys_draw2d(game: Game, delta: number) {
 
             let draw = game.World.Draw[i];
             switch (draw.Kind) {
-                case DrawKind.Rect:
-                    draw_rect(game, draw);
+                case DrawKind.Circle:
+                    draw_circle(game, draw);
                     break;
             }
         }
     }
 }
 
-function draw_rect(game: Game, draw: DrawRect) {
+function draw_circle(game: Game, draw: Draw) {
     game.Context2D.fillStyle = draw.Color;
-    game.Context2D.fillRect(-draw.Width / 2, -draw.Height / 2, draw.Width, draw.Height);
+    game.Context2D.beginPath();
+    game.Context2D.arc(0, 0, draw.Radius, 0, 2 * Math.PI);
+    game.Context2D.closePath();
+    game.Context2D.fill();
 }
