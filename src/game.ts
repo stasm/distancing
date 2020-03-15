@@ -22,8 +22,9 @@ export class Game {
 
     UI = document.querySelector("main")!;
     Context2D: CanvasRenderingContext2D;
+    ClearColor = "#222";
 
-    Population = 100;
+    Population = 200;
     DistancingRatio = 0.0;
     RecoveryTime = 10;
 

@@ -9,8 +9,7 @@ export function App(game: Game) {
             style="
                 position: absolute;
                 padding: 5px;
-                background: black;
-                color: white;
+                background: #fff;
                 font: 12px monospace;
             "
         >

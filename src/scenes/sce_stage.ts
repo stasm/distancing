@@ -37,7 +37,7 @@ export function scene_stage(game: Game) {
         ],
     });
     game.World.Health[patient0].State = "infected";
-    game.World.Draw[patient0].Color = "red";
+    game.World.Draw[patient0].Color = "#f00";
 
     for (let e = 0; e < game.Population * game.DistancingRatio; e++) {
         if (game.World.Mask[e] & Has.ControlBall) {
