@@ -1,8 +1,9 @@
 import {normalize} from "../../common/vec2.js";
 import {Has} from "../components/com_index.js";
+import {destroy} from "../core.js";
 import {Entity, Game} from "../game.js";
 
-const QUERY = Has.Transform2D | Has.ControlBall | Has.Move;
+const QUERY = Has.Transform2D | Has.ControlBall | Has.Move | Has.Collide;
 
 export function sys_control_ball(game: Game, delta: number) {
     for (let i = 0; i < game.World.Mask.length; i++) {
@@ -34,6 +35,11 @@ function update(game: Game, entity: Entity) {
     if (transform.Translation[1] > game.ViewportHeight) {
         transform.Translation[1] = game.ViewportHeight;
         control.Direction[1] = -control.Direction[1];
+    }
+
+    let collide = game.World.Collide[entity];
+    if (collide.Collisions.length > 0) {
+        destroy(game.World, entity);
     }
 
     let move = game.World.Move[entity];
