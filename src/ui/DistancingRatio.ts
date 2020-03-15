@@ -4,7 +4,7 @@ import {html} from "./html.js";
 
 export function DistancingRatio(game: Game) {
     return html`
-        <label style="display: flex; align-items: center;">
+        <label style="display: flex; align-items: center; margin-right: 30px;">
             Distancing: ${Math.round(game.DistancingRatio * 100)}%
             <input
                 type="range"

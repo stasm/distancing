@@ -4,7 +4,7 @@ import {html} from "./html.js";
 
 export function Population(game: Game) {
     return html`
-        <label style="display: flex; align-items: center;">
+        <label style="display: flex; align-items: center; margin-right: 30px;">
             Population: ${game.Population}
             <input
                 type="range"

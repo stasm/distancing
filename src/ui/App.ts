@@ -15,7 +15,7 @@ export function App(game: Game) {
                 font: 12px monospace;
             "
         >
-            <div style="flex: 1; display: flex; justify-content: space-between;">
+            <div style="flex: 1; display: flex; flex-wrap: wrap;">
                 ${Population(game)} ${DistancingRatio(game)} ${RecoveryTime(game)}
             </div>
             <button
