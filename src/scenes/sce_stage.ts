@@ -10,8 +10,10 @@ export function scene_stage(game: Game) {
     game.World = new World();
     set_seed(Date.now());
 
-    instantiate(game, {
-        Translation: [game.ViewportWidth / 2, game.ViewportHeight / 2],
-        Using: [draw_circle(10, "red"), move(200), control_ball(float(0, Math.PI * 2))],
-    });
+    for (let i = 0; i < 200; i++) {
+        instantiate(game, {
+            Translation: [float(0, game.ViewportWidth), float(0, game.ViewportHeight)],
+            Using: [draw_circle(10, "red"), move(200), control_ball(float(0, Math.PI * 2))],
+        });
+    }
 }
