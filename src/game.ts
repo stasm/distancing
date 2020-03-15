@@ -22,6 +22,8 @@ export class Game {
     UI = document.querySelector("main")!;
     Context2D: CanvasRenderingContext2D;
 
+    Population = 1000;
+    SociallyDistancedRatio = 0.0;
     RecoveryTime = 10;
 
     constructor() {
