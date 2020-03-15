@@ -25,8 +25,11 @@ function update(game: Game, entity: Entity, delta: number) {
         let collide = game.World.Collide[entity];
         for (let i = 0; i < collide.Collisions.length; i++) {
             let other = collide.Collisions[i];
-            game.World.Health[other.EntityId].State = "infected";
-            game.World.Draw[other.EntityId].Color = "red";
+            let health = game.World.Health[other.EntityId];
+            if (health.State === "vulnerable") {
+                game.World.Health[other.EntityId].State = "infected";
+                game.World.Draw[other.EntityId].Color = "red";
+            }
         }
     }
 }
