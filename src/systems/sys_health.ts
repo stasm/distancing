@@ -14,6 +14,13 @@ export function sys_health(game: Game, delta: number) {
 function update(game: Game, entity: Entity, delta: number) {
     let health = game.World.Health[entity];
     if (health.State === "infected") {
+        health.SinceInfection += delta;
+        if (health.SinceInfection > game.RecoveryTime) {
+            health.State = "recovered";
+            game.World.Draw[entity].Color = "green";
+            return;
+        }
+
         let collide = game.World.Collide[entity];
         for (let i = 0; i < collide.Collisions.length; i++) {
             let other = collide.Collisions[i];

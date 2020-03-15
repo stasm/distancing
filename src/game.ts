@@ -22,6 +22,8 @@ export class Game {
     UI = document.querySelector("main")!;
     Context2D: CanvasRenderingContext2D;
 
+    RecoveryTime = 10;
+
     constructor() {
         document.addEventListener("visibilitychange", () =>
             document.hidden ? loop_stop() : loop_start(this)

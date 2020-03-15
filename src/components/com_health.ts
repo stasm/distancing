@@ -3,6 +3,7 @@ import {Has} from "./com_index.js";
 
 export interface Health {
     State: "vulnerable" | "infected" | "recovered";
+    SinceInfection: number;
 }
 
 export function health() {
@@ -10,6 +11,7 @@ export function health() {
         game.World.Mask[entity] |= Has.Health;
         game.World.Health[entity] = {
             State: "vulnerable",
+            SinceInfection: 0,
         };
     };
 }
