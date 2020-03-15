@@ -50,8 +50,6 @@ export class Game {
         this.UI.addEventListener("wheel", evt => {
             this.InputDelta.WheelY = evt.deltaY;
         });
-        this.UI.addEventListener("contextmenu", evt => evt.preventDefault());
-        this.UI.addEventListener("click", () => this.UI.requestPointerLock());
 
         let canvas2d = document.querySelector("canvas")!;
         canvas2d.width = this.ViewportWidth;
