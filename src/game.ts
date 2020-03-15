@@ -1,6 +1,7 @@
 import {loop_start, loop_stop} from "./core.js";
 import {sys_draw2d} from "./systems/sys_draw2d.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
+import {sys_move} from "./systems/sys_move.js";
 import {sys_transform2d} from "./systems/sys_transform2d.js";
 import {World} from "./world.js";
 
@@ -65,6 +66,7 @@ export class Game {
 
     FrameUpdate(delta: number) {
         let now = performance.now();
+        sys_move(this, delta);
         sys_transform2d(this, delta);
         sys_draw2d(this, delta);
         sys_framerate(this, delta, performance.now() - now);
