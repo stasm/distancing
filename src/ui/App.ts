@@ -1,6 +1,7 @@
-import {Action} from "../actions.js";
 import {Game} from "../game.js";
+import {DistancingRatio} from "./DistancingRatio.js";
 import {html} from "./html.js";
+import {Population} from "./Population.js";
 
 export function App(game: Game) {
     return html`
@@ -13,17 +14,7 @@ export function App(game: Game) {
                 font: 12px monospace;
             "
         >
-            <label style="display: flex; align-items: center;">
-                Population: ${game.Population}
-                <input
-                    type="range"
-                    min="1"
-                    max="1000"
-                    value="${game.Population}"
-                    onchange="$(${Action.SetPopulation}, this.value)"
-                    style="margin-left: 10px;"
-                />
-            </label>
+            ${Population(game)} ${DistancingRatio(game)}
         </div>
     `;
 }

@@ -24,7 +24,7 @@ export class Game {
     Context2D: CanvasRenderingContext2D;
 
     Population = 100;
-    SociallyDistancedRatio = 0.0;
+    DistancingRatio = 0.0;
     RecoveryTime = 10;
 
     constructor() {
