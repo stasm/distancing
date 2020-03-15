@@ -12,7 +12,7 @@ export function scene_stage(game: Game) {
     game.World = new World();
     set_seed(Date.now());
 
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 1000; i++) {
         instantiate(game, {
             Translation: [float(0, game.ViewportWidth), float(0, game.ViewportHeight)],
             Using: [

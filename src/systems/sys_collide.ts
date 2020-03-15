@@ -1,5 +1,5 @@
 import {get_translation} from "../../common/mat2d.js";
-import {distance} from "../../common/vec2.js";
+import {distance_squared} from "../../common/vec2.js";
 import {Collide} from "../components/com_collide.js";
 import {Has} from "../components/com_index.js";
 import {Game} from "../game.js";
@@ -36,5 +36,5 @@ function check_collisions(collider: Collide, colliders: Collide[]) {
 }
 
 function intersect(a: Collide, b: Collide) {
-    return distance(a.Center, b.Center) < a.Radius + b.Radius;
+    return distance_squared(a.Center, b.Center) < (a.Radius + b.Radius) ** 2;
 }
