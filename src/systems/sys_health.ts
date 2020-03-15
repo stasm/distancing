@@ -18,6 +18,7 @@ function update(game: Game, entity: Entity, delta: number) {
         if (health.SinceInfection > game.RecoveryTime) {
             health.State = "recovered";
             game.World.Draw[entity].Color = "green";
+            game.World.Mask[entity] &= ~Has.Collide;
             return;
         }
 
