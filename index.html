@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="utf8" />
+<meta name="viewport" content="width=device-width, user-scalable=0" />
+<title>Distancing</title>
+<style>
+    html,
+    body {
+        overflow: hidden;
+        margin: 0;
+    }
+    main {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    nav {
+        height: 35px;
+    }
+    canvas#histo {
+        height: 100px;
+    }
+    canvas#scene {
+        flex: 1;
+    }
+</style>
+<main>
+    <nav></nav>
+    <canvas id="histo"></canvas>
+    <canvas id="scene"></canvas>
+</main>
+<script src="game.rollup.js"></script>
