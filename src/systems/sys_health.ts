@@ -17,7 +17,7 @@ function update(game: Game, entity: Entity, delta: number) {
         health.SinceInfection += delta;
         if (health.SinceInfection > game.RecoveryTime) {
             health.State = "recovered";
-            game.World.Draw[entity].Color = "#0f0";
+            game.World.Draw[entity].Color = game.ColorRecovered;
             game.World.Mask[entity] &= ~Has.Collide;
             return;
         }
@@ -28,7 +28,7 @@ function update(game: Game, entity: Entity, delta: number) {
             let health = game.World.Health[other.EntityId];
             if (health.State === "vulnerable") {
                 game.World.Health[other.EntityId].State = "infected";
-                game.World.Draw[other.EntityId].Color = "#f00";
+                game.World.Draw[other.EntityId].Color = game.ColorInfected;
             }
         }
     }

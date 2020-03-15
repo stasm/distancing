@@ -1,10 +1,10 @@
-import {Draw, DrawKind} from "../components/com_draw.js";
+import {DrawCircle, DrawKind} from "../components/com_draw.js";
 import {Has} from "../components/com_index.js";
 import {Game} from "../game.js";
 
 const QUERY = Has.Transform2D | Has.Draw;
 
-export function sys_draw2d(game: Game, delta: number) {
+export function sys_draw_scene(game: Game, delta: number) {
     game.ContextScene.resetTransform();
     game.ContextScene.fillStyle = game.ClearColor;
     game.ContextScene.fillRect(0, 0, game.CanvasScene.width, game.CanvasScene.height);
@@ -31,7 +31,7 @@ export function sys_draw2d(game: Game, delta: number) {
     }
 }
 
-function draw_circle(game: Game, draw: Draw) {
+function draw_circle(game: Game, draw: DrawCircle) {
     game.ContextScene.fillStyle = draw.Color;
     game.ContextScene.beginPath();
     game.ContextScene.arc(0, 0, draw.Radius, 0, 2 * Math.PI);

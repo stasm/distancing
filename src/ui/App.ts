@@ -7,7 +7,7 @@ export function App(game: Game) {
     return html`
         <div
             style="
-                position: absolute;
+                display: flex;
                 padding: 5px;
                 background: #fff;
                 font: 12px monospace;

@@ -1,10 +1,12 @@
 import {loop_start, loop_stop} from "./core.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_ball} from "./systems/sys_control_ball.js";
-import {sys_draw2d} from "./systems/sys_draw2d.js";
+import {sys_draw_histogram} from "./systems/sys_draw_histogram.js";
+import {sys_draw_scene} from "./systems/sys_draw_scene.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_health} from "./systems/sys_health.js";
 import {sys_move} from "./systems/sys_move.js";
+import {sys_snapshot} from "./systems/sys_snapshot.js";
 import {sys_transform2d} from "./systems/sys_transform2d.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
@@ -17,16 +19,21 @@ export class Game {
     InputState: Record<string, number> = {};
     InputDelta: Record<string, number> = {};
 
-    UI = document.querySelector("main")!;
+    UI = document.querySelector("nav")!;
     CanvasScene = document.querySelector("canvas#scene")! as HTMLCanvasElement;
     ContextScene = this.CanvasScene.getContext("2d")!;
     CanvasHisto = document.querySelector("canvas#histo")! as HTMLCanvasElement;
-    ContextHisto = this.CanvasScene.getContext("2d")!;
+    ContextHisto = this.CanvasHisto.getContext("2d")!;
+
     ClearColor = "#222";
+    ColorVulnerable = "#666";
+    ColorInfected = "#f00";
+    ColorRecovered = "#0f0";
 
     Population = 200;
     DistancingRatio = 0.0;
     RecoveryTime = 10;
+    Statistics: Array<[number, number, number]> = [];
 
     constructor() {
         document.addEventListener("visibilitychange", () =>
@@ -80,7 +87,9 @@ export class Game {
         sys_transform2d(this, delta);
         sys_collide(this, delta);
         sys_health(this, delta);
-        sys_draw2d(this, delta);
+        sys_snapshot(this, delta);
+        sys_draw_scene(this, delta);
+        sys_draw_histogram(this, delta);
         sys_ui(this, delta);
         sys_framerate(this, delta, performance.now() - now);
     }

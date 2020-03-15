@@ -8,19 +8,19 @@
         overflow: hidden;
         margin: 0;
     }
-    canvas,
     main {
-        position: absolute;
-        width: 100vw;
+        display: flex;
+        flex-direction: column;
         height: 100vh;
-        user-select: none;
     }
-    canvas#scene {
-        height: 80vh;
-        top: 20vh;
+    nav {
+        height: 35px;
     }
     canvas#histo {
-        height: 20vh;
+        height: 100px;
+    }
+    canvas#scene {
+        flex: 1;
     }
     #debug {
         display: flex;
@@ -47,9 +47,11 @@
     }
 </style>
 <body>
-    <canvas id="histo"></canvas>
-    <canvas id="scene"></canvas>
-    <main></main>
+    <main>
+        <nav></nav>
+        <canvas id="histo"></canvas>
+        <canvas id="scene"></canvas>
+    </main>
 
     <div id="debug">
         <div>update: <span id="update"></span></div>
