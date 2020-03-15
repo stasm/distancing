@@ -19,7 +19,7 @@ export function draw_circle(radius: number) {
         game.World.Draw[entity] = {
             Kind: DrawKind.Circle,
             Radius: radius,
-            Color: "black",
+            Color: "#999",
         };
     };
 }

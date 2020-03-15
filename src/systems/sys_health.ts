@@ -1,5 +1,4 @@
 import {Has} from "../components/com_index.js";
-import {destroy} from "../core.js";
 import {Entity, Game} from "../game.js";
 
 const QUERY = Has.Health | Has.Collide;
@@ -13,8 +12,13 @@ export function sys_health(game: Game, delta: number) {
 }
 
 function update(game: Game, entity: Entity, delta: number) {
-    let collide = game.World.Collide[entity];
-    if (collide.Collisions.length > 0) {
-        destroy(game.World, entity);
+    let health = game.World.Health[entity];
+    if (health.State === "infected") {
+        let collide = game.World.Collide[entity];
+        for (let i = 0; i < collide.Collisions.length; i++) {
+            let other = collide.Collisions[i];
+            game.World.Health[other.EntityId].State = "infected";
+            game.World.Draw[other.EntityId].Color = "red";
+        }
     }
 }

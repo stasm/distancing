@@ -16,12 +16,25 @@ export function scene_stage(game: Game) {
         instantiate(game, {
             Translation: [float(0, game.ViewportWidth), float(0, game.ViewportHeight)],
             Using: [
-                draw_circle(10),
-                collide(10),
-                move(200),
+                draw_circle(5),
+                collide(5),
+                move(100),
                 control_ball(float(0, Math.PI * 2)),
                 health(),
             ],
         });
     }
+
+    let patient0 = instantiate(game, {
+        Translation: [float(0, game.ViewportWidth), float(0, game.ViewportHeight)],
+        Using: [
+            draw_circle(5),
+            collide(5),
+            move(100),
+            control_ball(float(0, Math.PI * 2)),
+            health(),
+        ],
+    });
+    game.World.Health[patient0].State = "infected";
+    game.World.Draw[patient0].Color = "red";
 }
