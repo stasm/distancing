@@ -1,3 +1,4 @@
+import {Action} from "../actions.js";
 import {Game} from "../game.js";
 import {DistancingRatio} from "./DistancingRatio.js";
 import {html} from "./html.js";
@@ -8,12 +9,17 @@ export function App(game: Game) {
         <div
             style="
                 display: flex;
+                justify-content: space-between;
                 padding: 5px;
-                background: #fff;
                 font: 12px monospace;
             "
         >
-            ${Population(game)} ${DistancingRatio(game)}
+            <div style="display: flex;">
+                ${Population(game)} ${DistancingRatio(game)}
+            </div>
+            <button onclick="$(${Action.SetPopulation}, ${game.Population})">
+                Restart
+            </button>
         </div>
     `;
 }
