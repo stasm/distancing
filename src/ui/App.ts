@@ -3,6 +3,7 @@ import {Game} from "../game.js";
 import {DistancingRatio} from "./DistancingRatio.js";
 import {html} from "./html.js";
 import {Population} from "./Population.js";
+import {RecoveryTime} from "./RecoveryTime.js";
 
 export function App(game: Game) {
     return html`
@@ -14,10 +15,13 @@ export function App(game: Game) {
                 font: 12px monospace;
             "
         >
-            <div style="display: flex;">
-                ${Population(game)} ${DistancingRatio(game)}
+            <div style="flex: 1; display: flex; justify-content: space-between;">
+                ${Population(game)} ${DistancingRatio(game)} ${RecoveryTime(game)}
             </div>
-            <button onclick="$(${Action.SetPopulation}, ${game.Population})">
+            <button
+                onclick="$(${Action.SetPopulation}, ${game.Population})"
+                style="margin-left: 30px;"
+            >
                 Restart
             </button>
         </div>

@@ -2,16 +2,16 @@ import {Action} from "../actions.js";
 import {Game} from "../game.js";
 import {html} from "./html.js";
 
-export function Population(game: Game) {
+export function RecoveryTime(game: Game) {
     return html`
         <label style="display: flex; align-items: center;">
-            Population: ${game.Population}
+            Recovery Time: ${game.RecoveryTime}s
             <input
                 type="range"
                 min="1"
-                max="1000"
-                value="${game.Population}"
-                onchange="$(${Action.SetPopulation}, parseInt(this.value))"
+                max="20"
+                value="${game.RecoveryTime}"
+                onchange="$(${Action.SetRecoveryTime}, parseInt(this.value))"
                 style="margin-left: 10px;"
             />
         </label>

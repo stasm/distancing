@@ -5,6 +5,7 @@ import {scene_stage} from "./scenes/sce_stage.js";
 export const enum Action {
     SetPopulation,
     SetDistancingRatio,
+    SetRecoveryTime,
 }
 
 export function dispatch(game: Game, action: Action, args: unknown) {
@@ -30,6 +31,11 @@ export function dispatch(game: Game, action: Action, args: unknown) {
                     }
                 }
             });
+            break;
+        }
+        case Action.SetRecoveryTime: {
+            let time = args as number;
+            game.RecoveryTime = time;
             break;
         }
     }
