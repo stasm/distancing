@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "es2019",
+        "lib": [
+            "dom",
+            "esnext.array"
+        ],
+        "module": "es2015",
+        "moduleResolution": "node",
+        "strict": true,
+        "sourceMap": true
+    }
+}
