@@ -31,9 +31,9 @@ export class Game {
     ColorInfected = "#f00";
     ColorRecovered = "#0f0";
 
-    Population = 300;
+    Population = 750;
     DistancingRatio = 0.0;
-    RecoveryTime = 10;
+    RecoveryTime = 20;
     Statistics: Array<[number, number, number]> = [];
 
     constructor() {

@@ -15,7 +15,7 @@ export function scene_stage(game: Game) {
     game.Statistics = [];
     set_seed(Date.now());
 
-    for (let i = 0; i < game.Population; i++) {
+    for (let i = 0; i < game.Population - 1; i++) {
         instantiate(game, {
             Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
             Rotation: float(0, Math.PI * 2),
