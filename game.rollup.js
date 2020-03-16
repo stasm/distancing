@@ -568,7 +568,7 @@
                 display: flex;
                 justify-content: space-between;
                 padding: 5px;
-                font: 12px monospace;
+                font: 13px Arial, sans-serif;
             "
         >
             <div style="flex: 1; display: flex; flex-wrap: wrap;">
@@ -618,7 +618,7 @@
             this.ColorRecovered = "#9582dd";
             this.Population = 500;
             this.DistancingRatio = 0.0;
-            this.RecoveryTime = 20;
+            this.RecoveryTime = 15;
             this.Statistics = [];
             document.addEventListener("visibilitychange", () => document.hidden ? loop_stop() : loop_start(this));
             this.CanvasScene.width = this.CanvasScene.clientWidth;
