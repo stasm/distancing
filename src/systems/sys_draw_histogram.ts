@@ -3,7 +3,7 @@ import {Game} from "../game.js";
 let w = 1;
 
 export function sys_draw_histogram(game: Game, delta: number) {
-    game.ContextHisto.fillStyle = "#333";
+    game.ContextHisto.fillStyle = "#f8f8f8";
     game.ContextHisto.fillRect(0, 0, game.CanvasHisto.width, game.CanvasHisto.height);
 
     for (let i = 0; i < game.Statistics.length; i++) {

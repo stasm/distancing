@@ -26,10 +26,10 @@ export class Game {
     CanvasHisto = document.querySelector("canvas#histo")! as HTMLCanvasElement;
     ContextHisto = this.CanvasHisto.getContext("2d")!;
 
-    ClearColor = "#222";
-    ColorVulnerable = "#666";
-    ColorInfected = "#f00";
-    ColorRecovered = "#0f0";
+    ClearColor = "#e2ddc3";
+    ColorVulnerable = "#fff";
+    ColorInfected = "#ce6a12";
+    ColorRecovered = "#9582dd";
 
     Population = 750;
     DistancingRatio = 0.0;
