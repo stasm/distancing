@@ -30,7 +30,7 @@ export class Game {
 
     Population = 500;
     DistancingRatio = 0.0;
-    RecoveryTime = 20;
+    RecoveryTime = 15;
     Statistics: Array<[number, number, number]> = [];
 
     constructor() {
