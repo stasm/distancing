@@ -4,7 +4,7 @@ import {html} from "./html.js";
 
 export function RecoveryTime(game: Game) {
     return html`
-        <label style="display: flex; align-items: center;">
+        <label style="display: flex; align-items: center; margin-right: 30px;">
             Recovery Time: ${game.RecoveryTime}s
             <input
                 type="range"

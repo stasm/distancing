@@ -16,12 +16,9 @@ export function App(game: Game) {
             "
         >
             <div style="flex: 1; display: flex; flex-wrap: wrap;">
-                ${Population(game)} ${DistancingRatio(game)} ${RecoveryTime(game)}
+                ${Population(game)} ${RecoveryTime(game)} ${DistancingRatio(game)}
             </div>
-            <button
-                onclick="$(${Action.SetPopulation}, ${game.Population})"
-                style="margin-left: 30px;"
-            >
+            <button onclick="$(${Action.SetPopulation}, ${game.Population})">
                 Restart
             </button>
         </div>
