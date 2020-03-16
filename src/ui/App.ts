@@ -12,7 +12,7 @@ export function App(game: Game) {
                 display: flex;
                 justify-content: space-between;
                 padding: 5px;
-                font: 12px monospace;
+                font: 13px Arial, sans-serif;
             "
         >
             <div style="flex: 1; display: flex; flex-wrap: wrap;">
