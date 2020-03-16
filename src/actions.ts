@@ -22,7 +22,7 @@ export function dispatch(game: Game, action: Action, args: unknown) {
             let partition_index = game.Population * game.DistancingRatio;
             requestAnimationFrame(() => {
                 for (let e = 0; e < game.World.Mask.length; e++) {
-                    if (game.World.Mask[e] & Has.ControlBall) {
+                    if (game.World.Mask[e] & Has.Bounce) {
                         if (e < partition_index) {
                             game.World.Mask[e] &= ~Has.Move;
                         } else {

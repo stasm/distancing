@@ -1,6 +1,6 @@
 const enum Component {
+    Bounce,
     Collide,
-    ControlBall,
     Draw,
     Health,
     Move,
@@ -8,8 +8,8 @@ const enum Component {
 }
 
 export const enum Has {
+    Bounce = 1 << Component.Bounce,
     Collide = 1 << Component.Collide,
-    ControlBall = 1 << Component.ControlBall,
     Draw = 1 << Component.Draw,
     Health = 1 << Component.Health,
     Move = 1 << Component.Move,

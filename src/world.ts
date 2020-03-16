@@ -1,5 +1,4 @@
 import {Collide} from "./components/com_collide.js";
-import {ControlBall} from "./components/com_control_ball.js";
 import {Draw} from "./components/com_draw.js";
 import {Health} from "./components/com_health.js";
 import {Move} from "./components/com_move.js";
@@ -10,7 +9,6 @@ export class World {
     Mask: Array<number> = [];
     // Component data
     Collide: Array<Collide> = [];
-    ControlBall: Array<ControlBall> = [];
     Draw: Array<Draw> = [];
     Health: Array<Health> = [];
     Move: Array<Move> = [];

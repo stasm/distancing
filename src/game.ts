@@ -1,6 +1,6 @@
 import {loop_start, loop_stop} from "./core.js";
+import {sys_bounce} from "./systems/sys_bounce.js";
 import {sys_collide} from "./systems/sys_collide.js";
-import {sys_control_ball} from "./systems/sys_control_ball.js";
 import {sys_draw_histogram} from "./systems/sys_draw_histogram.js";
 import {sys_draw_scene} from "./systems/sys_draw_scene.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
@@ -82,8 +82,8 @@ export class Game {
 
     FrameUpdate(delta: number) {
         let now = performance.now();
-        sys_control_ball(this, delta);
         sys_move(this, delta);
+        sys_bounce(this, delta);
         sys_transform2d(this, delta);
         sys_collide(this, delta);
         sys_health(this, delta);
