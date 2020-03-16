@@ -13,23 +13,20 @@ function float(min = 0, max = 1) {
 return rand() * (max - min) + min;
 }
 
+function bounce() {
+return (game, entity) => {
+game.World.Mask[entity] |= 1 /* Bounce */;
+};
+}
+
 function collide(radius) {
 return (game, entity) => {
-game.World.Mask[entity] |= 1 /* Collide */;
+game.World.Mask[entity] |= 2 /* Collide */;
 game.World.Collide[entity] = {
 EntityId: entity,
 Radius: radius,
 Center: [0, 0],
 Collisions: [],
-};
-};
-}
-
-function control_ball(angle) {
-return (game, entity) => {
-game.World.Mask[entity] |= 2 /* ControlBall */;
-game.World.ControlBall[entity] = {
-Direction: [Math.cos(angle), Math.sin(angle)],
 };
 };
 }
@@ -59,9 +56,14 @@ function move(Speed) {
 return (game, entity) => {
 game.World.Mask[entity] |= 16 /* Move */;
 game.World.Move[entity] = {
-Direction: [0, 0],
 Speed,
 };
+};
+}
+
+function wander() {
+return (game, entity) => {
+game.World.Mask[entity] |= 64 /* Wander */;
 };
 }
 
@@ -156,7 +158,6 @@ let last = performance.now();
 let tick = (now) => {
 let delta = (now - last) / 1000;
 game.FrameUpdate(delta);
-game.FrameReset();
 last = now;
 raf = requestAnimationFrame(tick);
 };
@@ -197,7 +198,6 @@ constructor() {
 this.Mask = [];
 
 this.Collide = [];
-this.ControlBall = [];
 this.Draw = [];
 this.Health = [];
 this.Move = [];
@@ -209,32 +209,22 @@ function scene_stage(game) {
 game.World = new World();
 game.Statistics = [];
 set_seed(Date.now());
-for (let i = 0; i < game.Population; i++) {
+for (let i = 0; i < game.Population - 1; i++) {
 instantiate(game, {
 Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
-Using: [
-draw_circle(3),
-collide(3),
-move(50),
-control_ball(float(0, Math.PI * 2)),
-health(),
-],
+Rotation: float(0, Math.PI * 2),
+Using: [draw_circle(3), collide(3), move(50), bounce(), wander(), health()],
 });
 }
 let patient0 = instantiate(game, {
 Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
-Using: [
-draw_circle(3),
-collide(3),
-move(50),
-control_ball(float(0, Math.PI * 2)),
-health(),
-],
+Rotation: float(0, Math.PI * 2),
+Using: [draw_circle(3), collide(3), move(50), bounce(), wander(), health()],
 });
 game.World.Health[patient0].State = "infected";
 game.World.Draw[patient0].Color = game.ColorInfected;
 for (let e = 0; e < game.Population * game.DistancingRatio; e++) {
-if (game.World.Mask[e] & 2 /* ControlBall */) {
+if (game.World.Mask[e] & 1 /* Bounce */) {
 game.World.Mask[e] &= ~16 /* Move */;
 }
 }
@@ -254,7 +244,7 @@ game.DistancingRatio = ratio;
 let partition_index = game.Population * game.DistancingRatio;
 requestAnimationFrame(() => {
 for (let e = 0; e < game.World.Mask.length; e++) {
-if (game.World.Mask[e] & 2 /* ControlBall */) {
+if (game.World.Mask[e] & 1 /* Bounce */) {
 if (e < partition_index) {
 game.World.Mask[e] &= ~16 /* Move */;
 }
@@ -274,29 +264,50 @@ break;
 }
 }
 
+const QUERY = 32 /* Transform2D */ | 1 /* Bounce */;
+function sys_bounce(game, delta) {
+for (let i = 0; i < game.World.Mask.length; i++) {
+if ((game.World.Mask[i] & QUERY) == QUERY) {
+update(game, i);
+}
+}
+}
+function update(game, entity) {
+let transform = game.World.Transform2D[entity];
+if (transform.Translation[0] < 0) {
+transform.Translation[0] = 0;
+transform.Rotation = Math.PI - transform.Rotation;
+transform.Dirty = true;
+}
+if (transform.Translation[0] > game.CanvasScene.width) {
+transform.Translation[0] = game.CanvasScene.width;
+transform.Rotation = Math.PI - transform.Rotation;
+transform.Dirty = true;
+}
+if (transform.Translation[1] < 0) {
+transform.Translation[1] = 0;
+transform.Rotation = -transform.Rotation;
+transform.Dirty = true;
+}
+if (transform.Translation[1] > game.CanvasScene.height) {
+transform.Translation[1] = game.CanvasScene.height;
+transform.Rotation = -transform.Rotation;
+transform.Dirty = true;
+}
+}
+
 function distance_squared(a, b) {
 let x = b[0] - a[0];
 let y = b[1] - a[1];
 return x * x + y * y;
 }
-function normalize(out, a) {
-let x = a[0];
-let y = a[1];
-let len = x * x + y * y;
-if (len > 0) {
-len = 1 / Math.sqrt(len);
-}
-out[0] = a[0] * len;
-out[1] = a[1] * len;
-return out;
-}
 
-const QUERY = 32 /* Transform2D */ | 1 /* Collide */;
+const QUERY$1 = 32 /* Transform2D */ | 2 /* Collide */;
 function sys_collide(game, delta) {
 
 let all_colliders = [];
 for (let i = 0; i < game.World.Mask.length; i++) {
-if ((game.World.Mask[i] & QUERY) === QUERY) {
+if ((game.World.Mask[i] & QUERY$1) === QUERY$1) {
 let transform = game.World.Transform2D[i];
 let collider = game.World.Collide[i];
 
@@ -322,53 +333,9 @@ function intersect(a, b) {
 return distance_squared(a.Center, b.Center) < (a.Radius + b.Radius) ** 2;
 }
 
-const QUERY$1 = 32 /* Transform2D */ | 2 /* ControlBall */ | 16 /* Move */;
-function sys_control_ball(game, delta) {
-for (let i = 0; i < game.World.Mask.length; i++) {
-if ((game.World.Mask[i] & QUERY$1) == QUERY$1) {
-update(game, i);
-}
-}
-}
-function update(game, entity) {
-let control = game.World.ControlBall[entity];
-let transform = game.World.Transform2D[entity];
-let bounced = false;
-if (transform.Translation[0] < 0) {
-transform.Translation[0] = 0;
-control.Direction[0] = -control.Direction[0];
-bounced = true;
-}
-if (transform.Translation[0] > game.CanvasScene.width) {
-transform.Translation[0] = game.CanvasScene.width;
-control.Direction[0] = -control.Direction[0];
-bounced = true;
-}
-if (transform.Translation[1] < 0) {
-transform.Translation[1] = 0;
-control.Direction[1] = -control.Direction[1];
-bounced = true;
-}
-if (transform.Translation[1] > game.CanvasScene.height) {
-transform.Translation[1] = game.CanvasScene.height;
-control.Direction[1] = -control.Direction[1];
-bounced = true;
-}
-if (!bounced) {
-
-control.Direction[0] += float(-0.1, 0.1);
-control.Direction[1] += float(-0.1, 0.1);
-normalize(control.Direction, control.Direction);
-}
-let move = game.World.Move[entity];
-move.Direction[0] = control.Direction[0];
-move.Direction[1] = control.Direction[1];
-normalize(move.Direction, move.Direction);
-}
-
 let w = 1;
 function sys_draw_histogram(game, delta) {
-game.ContextHisto.fillStyle = "#333";
+game.ContextHisto.fillStyle = "#f8f8f8";
 game.ContextHisto.fillRect(0, 0, game.CanvasHisto.width, game.CanvasHisto.height);
 for (let i = 0; i < game.Statistics.length; i++) {
 let count = game.Statistics[i];
@@ -425,7 +392,7 @@ fps_span.textContent = (1 / delta).toFixed();
 }
 }
 
-const QUERY$3 = 8 /* Health */ | 1 /* Collide */;
+const QUERY$3 = 8 /* Health */ | 2 /* Collide */;
 function sys_health(game, delta) {
 for (let i = 0; i < game.World.Mask.length; i++) {
 if ((game.World.Mask[i] & QUERY$3) == QUERY$3) {
@@ -440,7 +407,7 @@ health.SinceInfection += delta;
 if (health.SinceInfection > game.RecoveryTime) {
 health.State = "recovered";
 game.World.Draw[entity].Color = game.ColorRecovered;
-game.World.Mask[entity] &= ~1 /* Collide */;
+game.World.Mask[entity] &= ~2 /* Collide */;
 return;
 }
 let collide = game.World.Collide[entity];
@@ -463,11 +430,14 @@ update$2(game, i, delta);
 }
 }
 }
+let forward = [0, 0];
 function update$2(game, entity, delta) {
 let transform = game.World.Transform2D[entity];
 let move = game.World.Move[entity];
-transform.Translation[0] += move.Direction[0] * move.Speed * delta;
-transform.Translation[1] += move.Direction[1] * move.Speed * delta;
+forward[0] = transform.World[0];
+forward[1] = transform.World[1];
+transform.Translation[0] += forward[0] * move.Speed * delta;
+transform.Translation[1] += forward[1] * move.Speed * delta;
 transform.Dirty = true;
 }
 
@@ -582,7 +552,7 @@ Recovery Time: ${game.RecoveryTime}s
 <input
 type="range"
 min="1"
-max="20"
+max="30"
 value="${game.RecoveryTime}"
 onchange="$(${2 /* SetRecoveryTime */}, parseInt(this.value))"
 style="margin-left: 10px;"
@@ -622,66 +592,48 @@ game.UI.innerHTML = prev = next;
 }
 }
 
+const QUERY$7 = 32 /* Transform2D */ | 64 /* Wander */;
+function sys_wander(game, delta) {
+for (let i = 0; i < game.World.Mask.length; i++) {
+if ((game.World.Mask[i] & QUERY$7) == QUERY$7) {
+update$4(game, i);
+}
+}
+}
+function update$4(game, entity) {
+let transform = game.World.Transform2D[entity];
+
+transform.Rotation += float(-0.1, 0.1);
+transform.Dirty = true;
+}
+
 class Game {
 constructor() {
 this.World = new World();
-this.InputState = {};
-this.InputDelta = {};
 this.UI = document.querySelector("nav");
 this.CanvasScene = document.querySelector("canvas#scene");
 this.ContextScene = this.CanvasScene.getContext("2d");
 this.CanvasHisto = document.querySelector("canvas#histo");
 this.ContextHisto = this.CanvasHisto.getContext("2d");
-this.ClearColor = "#222";
-this.ColorVulnerable = "#666";
-this.ColorInfected = "#f00";
-this.ColorRecovered = "#0f0";
-this.Population = 300;
+this.ClearColor = "#e2ddc3";
+this.ColorVulnerable = "#fff";
+this.ColorInfected = "#ce6a12";
+this.ColorRecovered = "#9582dd";
+this.Population = 750;
 this.DistancingRatio = 0.0;
-this.RecoveryTime = 10;
+this.RecoveryTime = 20;
 this.Statistics = [];
 document.addEventListener("visibilitychange", () => document.hidden ? loop_stop() : loop_start(this));
-window.addEventListener("keydown", evt => {
-if (!evt.repeat) {
-this.InputState[evt.code] = 1;
-this.InputDelta[evt.code] = 1;
-}
-});
-window.addEventListener("keyup", evt => {
-this.InputState[evt.code] = 0;
-this.InputDelta[evt.code] = -1;
-});
-this.UI.addEventListener("mousedown", evt => {
-this.InputState[`Mouse${evt.button}`] = 1;
-this.InputDelta[`Mouse${evt.button}`] = 1;
-});
-this.UI.addEventListener("mouseup", evt => {
-this.InputState[`Mouse${evt.button}`] = 0;
-this.InputDelta[`Mouse${evt.button}`] = -1;
-});
-this.UI.addEventListener("mousemove", evt => {
-this.InputState.MouseX = evt.offsetX;
-this.InputState.MouseY = evt.offsetY;
-this.InputDelta.MouseX = evt.movementX;
-this.InputDelta.MouseY = evt.movementY;
-});
-this.UI.addEventListener("wheel", evt => {
-this.InputDelta.WheelY = evt.deltaY;
-});
 this.CanvasScene.width = this.CanvasScene.clientWidth;
 this.CanvasScene.height = this.CanvasScene.clientHeight;
 this.CanvasHisto.width = this.CanvasHisto.clientWidth;
 this.CanvasHisto.height = this.CanvasHisto.clientHeight;
 }
-FrameReset() {
-for (let name in this.InputDelta) {
-this.InputDelta[name] = 0;
-}
-}
 FrameUpdate(delta) {
 let now = performance.now();
-sys_control_ball(this);
 sys_move(this, delta);
+sys_bounce(this);
+sys_wander(this);
 sys_transform2d(this);
 sys_collide(this);
 sys_health(this, delta);
