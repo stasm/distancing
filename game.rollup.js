@@ -619,7 +619,7 @@
             this.ColorVulnerable = "#fff";
             this.ColorInfected = "#ce6a12";
             this.ColorRecovered = "#9582dd";
-            this.Population = 750;
+            this.Population = 500;
             this.DistancingRatio = 0.0;
             this.RecoveryTime = 20;
             this.Statistics = [];
