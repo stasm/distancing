@@ -547,7 +547,7 @@
 
     function RecoveryTime(game) {
         return html `
-        <label style="display: flex; align-items: center;">
+        <label style="display: flex; align-items: center; margin-right: 30px;">
             Recovery Time: ${game.RecoveryTime}s
             <input
                 type="range"
@@ -574,10 +574,7 @@
             <div style="flex: 1; display: flex; flex-wrap: wrap;">
                 ${Population(game)} ${RecoveryTime(game)} ${DistancingRatio(game)}
             </div>
-            <button
-                onclick="$(${0 /* SetPopulation */}, ${game.Population})"
-                style="margin-left: 30px;"
-            >
+            <button onclick="$(${0 /* SetPopulation */}, ${game.Population})">
                 Restart
             </button>
         </div>
