@@ -28,7 +28,7 @@ export class Game {
     ColorInfected = "#ce6a12";
     ColorRecovered = "#9582dd";
 
-    Population = 750;
+    Population = 500;
     DistancingRatio = 0.0;
     RecoveryTime = 20;
     Statistics: Array<[number, number, number]> = [];
