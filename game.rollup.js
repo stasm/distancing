@@ -572,7 +572,7 @@
             "
         >
             <div style="flex: 1; display: flex; flex-wrap: wrap;">
-                ${Population(game)} ${DistancingRatio(game)} ${RecoveryTime(game)}
+                ${Population(game)} ${RecoveryTime(game)} ${DistancingRatio(game)}
             </div>
             <button
                 onclick="$(${0 /* SetPopulation */}, ${game.Population})"
