@@ -5,6 +5,7 @@ const enum Component {
     Health,
     Move,
     Transform2D,
+    Wander,
 }
 
 export const enum Has {
@@ -14,4 +15,5 @@ export const enum Has {
     Health = 1 << Component.Health,
     Move = 1 << Component.Move,
     Transform2D = 1 << Component.Transform2D,
+    Wander = 1 << Component.Wander,
 }

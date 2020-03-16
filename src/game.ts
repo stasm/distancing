@@ -9,6 +9,7 @@ import {sys_move} from "./systems/sys_move.js";
 import {sys_snapshot} from "./systems/sys_snapshot.js";
 import {sys_transform2d} from "./systems/sys_transform2d.js";
 import {sys_ui} from "./systems/sys_ui.js";
+import {sys_wander} from "./systems/sys_wander.js";
 import {World} from "./world.js";
 
 export type Entity = number;
@@ -84,6 +85,7 @@ export class Game {
         let now = performance.now();
         sys_move(this, delta);
         sys_bounce(this, delta);
+        sys_wander(this, delta);
         sys_transform2d(this, delta);
         sys_collide(this, delta);
         sys_health(this, delta);
