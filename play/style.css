@@ -2,17 +2,20 @@ html,
 body {
     overflow: hidden;
     margin: 0;
+    font: 13px Arial, sans-serif;
 }
 
 #simulation {
     display: flex;
 }
 
-#controls {
+#sidebar {
     width: 30vw;
-    margin-top: 120px;
     padding: 20px;
-    font: 13px Arial, sans-serif;
+}
+
+#controls {
+    margin: 20px 0;
 }
 
 #drawings {

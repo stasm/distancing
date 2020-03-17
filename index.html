@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf8" />
 <meta name="viewport" content="width=device-width, user-scalable=0" />
-<title>Distancing</title>
+<title>Social Distancing Simulator</title>
 <link rel="stylesheet" href="play/style.css" />
 <style>
     #debug {
@@ -30,7 +30,40 @@
 </style>
 <body>
     <div id="simulation">
-        <div id="controls"></div>
+        <div id="sidebar">
+            <h1>Social Distancing</h1>
+
+            <p>
+                Visualize how social distancing helps <em>flatten the curve</em> and slows down the
+                spread of a fictional disease in a community of little colored dots.
+            </p>
+
+            <p>
+                Tweak the sliders below to change the parameters of the simulation. Some parameters
+                may be changed as the simulation runs.
+            </p>
+
+            <p>
+                Make some dots stop moving by adjusting the <em>Distancing</em> ratio.
+                Self-isolating dots can still contract the disease from other moving dots, but since
+                they're not moving, their transmission rate is greatly reduced.
+            </p>
+
+            <div id="controls"></div>
+
+            <p>
+                Inspired by the
+                <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/"
+                    >Washington Post story</a
+                >
+                about social distancing. Please keep in mind that the simulation is simplified, and
+                does not reflect how diseases spread in real life, not how people move in their
+                communities. It's meant as an illustration of a principle, rather than a predictor
+                of an exact outcome.
+            </p>
+
+            <p>Source available on <a href="https://github.com/stasm/distancing">GitHub</a>.</p>
+        </div>
         <div id="drawings">
             <canvas id="histo"></canvas>
             <canvas id="scene"></canvas>
