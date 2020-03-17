@@ -13,9 +13,9 @@ export function blu_dot(game: Game): Blueprint2D {
         Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
         Rotation: float(0, Math.PI * 2),
         Using: [
-            draw_circle(game.DotRadius),
-            collide(game.DotRadius),
-            move(game.MoveSpeed),
+            draw_circle(game.State.DotRadius),
+            collide(game.State.DotRadius),
+            move(game.State.MoveSpeed),
             bounce(),
             wander(),
             health(),

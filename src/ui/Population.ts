@@ -1,18 +1,17 @@
-import {Action} from "../actions.js";
-import {Game} from "../game.js";
+import {Action, State} from "../actions.js";
 import {html} from "./html.js";
 
-export function Population(game: Game) {
+export function Population(state: State) {
     return html`
         <label>
             <span>
-                Population: ${game.Population}
+                Population: ${state.Population}
             </span>
             <input
                 type="range"
                 min="1"
                 max="1000"
-                value="${game.Population}"
+                value="${state.Population}"
                 onchange="$(${Action.SetPopulation}, parseInt(this.value))"
             />
         </label>

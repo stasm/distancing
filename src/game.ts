@@ -1,5 +1,5 @@
 import {loop_start, loop_stop} from "./core.js";
-import {params_read, SimulationParams} from "./params.js";
+import {read_from_url, SimulationParams} from "./params.js";
 import {sys_bounce} from "./systems/sys_bounce.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_draw_histogram} from "./systems/sys_draw_histogram.js";
@@ -15,7 +15,7 @@ import {World} from "./world.js";
 
 export type Entity = number;
 
-export class Game implements SimulationParams {
+export class Game {
     World = new World();
 
     UI = document.querySelector("#controls")!;
@@ -29,12 +29,14 @@ export class Game implements SimulationParams {
     ColorInfected = "#ce6a12";
     ColorRecovered = "#9582dd";
 
-    Population = 500;
-    DotRadius = 3;
-    RecoveryTime = 15;
-    MoveSpeed = 50;
-    Distancing = 0.0;
     Statistics: Array<[number, number, number]> = [];
+    State: SimulationParams = {
+        Population: 500,
+        DotRadius: 3,
+        RecoveryTime: 15,
+        MoveSpeed: 50,
+        Distancing: 0.0,
+    };
 
     constructor() {
         document.addEventListener("visibilitychange", () =>
@@ -46,7 +48,7 @@ export class Game implements SimulationParams {
         this.CanvasHisto.width = this.CanvasHisto.clientWidth;
         this.CanvasHisto.height = this.CanvasHisto.clientHeight;
 
-        params_read(this);
+        read_from_url(this.State);
     }
 
     FrameUpdate(delta: number) {

@@ -4,7 +4,7 @@ import {App} from "../ui/App.js";
 let prev: string;
 
 export function sys_ui(game: Game, delta: number) {
-    let next = App(game);
+    let next = App(game.State);
     if (next !== prev) {
         game.UI.innerHTML = prev = next;
     }

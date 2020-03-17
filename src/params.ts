@@ -1,5 +1,4 @@
 import {clamp} from "../common/number.js";
-import {Game} from "./game.js";
 
 export interface SimulationParams {
     Population: number;
@@ -9,41 +8,57 @@ export interface SimulationParams {
     Distancing: number;
 }
 
-declare global {
-    interface URLSearchParams {
-        [Symbol.iterator](): IterableIterator<[string, string]>;
-    }
-}
+export function read_from_url(params: SimulationParams) {
+    let search = new URL(document.location.href).searchParams;
+    let value;
 
-export function params_read(game: Game) {
-    let url = new URL(document.location.href);
-    for (let [name, value] of url.searchParams) {
-        switch (name) {
-            case "Population":
-                game.Population = clamp(parseInt(value), 1, 1000);
-                break;
-            case "DotRadius":
-                game.DotRadius = clamp(parseInt(value), 1, 10);
-                break;
-            case "RecoveryTime":
-                game.RecoveryTime = clamp(parseInt(value), 1, 30);
-                break;
-            case "MoveSpeed":
-                game.MoveSpeed = clamp(parseInt(value), 1, 100);
-                break;
-            case "Distancing":
-                game.Distancing = clamp(parseInt(value), 0, 100) / 100;
-                break;
+    value = search.get("Population");
+    if (value !== null) {
+        value = parseInt(value);
+        if (!Number.isNaN(value)) {
+            params.Population = clamp(value, 1, 1000);
+        }
+    }
+
+    value = search.get("DotRadius");
+    if (value !== null) {
+        value = parseInt(value);
+        if (!Number.isNaN(value)) {
+            params.DotRadius = clamp(value, 1, 10);
+        }
+    }
+
+    value = search.get("RecoveryTime");
+    if (value !== null) {
+        value = parseInt(value);
+        if (!Number.isNaN(value)) {
+            params.RecoveryTime = clamp(value, 1, 30);
+        }
+    }
+
+    value = search.get("MoveSpeed");
+    if (value !== null) {
+        value = parseInt(value);
+        if (!Number.isNaN(value)) {
+            params.MoveSpeed = clamp(value, 1, 100);
+        }
+    }
+
+    value = search.get("Distancing");
+    if (value !== null) {
+        value = parseInt(value);
+        if (!Number.isNaN(value)) {
+            params.Distancing = clamp(value, 0, 1);
         }
     }
 }
 
-export function params_write(game: Game) {
+export function write_to_url(params: SimulationParams) {
     let url = new URL(document.location.href);
-    url.searchParams.set("Population", game.Population.toString());
-    url.searchParams.set("DotRadius", game.DotRadius.toString());
-    url.searchParams.set("RecoveryTime", game.RecoveryTime.toString());
-    url.searchParams.set("MoveSpeed", game.MoveSpeed.toString());
-    url.searchParams.set("Distancing", (game.Distancing * 100).toFixed(0));
-    return url;
+    url.searchParams.set("Population", params.Population.toString());
+    url.searchParams.set("DotRadius", params.DotRadius.toString());
+    url.searchParams.set("RecoveryTime", params.RecoveryTime.toString());
+    url.searchParams.set("MoveSpeed", params.MoveSpeed.toString());
+    url.searchParams.set("Distancing", (params.Distancing * 100).toFixed(0));
+    history.replaceState(params, "Distancing", "?" + url.searchParams.toString());
 }

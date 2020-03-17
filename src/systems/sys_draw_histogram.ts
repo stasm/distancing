@@ -9,9 +9,9 @@ export function sys_draw_histogram(game: Game, delta: number) {
     for (let i = 0; i < game.Statistics.length; i++) {
         let count = game.Statistics[i];
 
-        let vulnerable = (count[0] / game.Population) * game.CanvasHisto.height;
-        let infected = (count[1] / game.Population) * game.CanvasHisto.height;
-        let recovered = (count[2] / game.Population) * game.CanvasHisto.height;
+        let vulnerable = (count[0] / game.State.Population) * game.CanvasHisto.height;
+        let infected = (count[1] / game.State.Population) * game.CanvasHisto.height;
+        let recovered = (count[2] / game.State.Population) * game.CanvasHisto.height;
 
         game.ContextHisto.fillStyle = game.ColorRecovered;
         game.ContextHisto.fillRect(i * w, 0, w, recovered);

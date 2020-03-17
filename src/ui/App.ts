@@ -1,5 +1,4 @@
-import {Action} from "../actions.js";
-import {Game} from "../game.js";
+import {Action, State} from "../actions.js";
 import {DistancingRatio} from "./DistancingRatio.js";
 import {DotRadius} from "./DotRadius.js";
 import {html} from "./html.js";
@@ -7,19 +6,16 @@ import {MoveSpeed} from "./MoveSpeed.js";
 import {Population} from "./Population.js";
 import {RecoveryTime} from "./RecoveryTime.js";
 
-export function App(game: Game) {
+export function App(state: State) {
     return html`
         <div>
             <div>
-                ${Population(game)} ${DotRadius(game)} ${RecoveryTime(game)} ${MoveSpeed(game)}
-                ${DistancingRatio(game)}
+                ${Population(state)} ${DotRadius(state)} ${RecoveryTime(state)} ${MoveSpeed(state)}
+                ${DistancingRatio(state)}
             </div>
             <div style="margin-top: 20px;">
-                <button onclick="$(${Action.SetPopulation}, ${game.Population})">
+                <button onclick="$(${Action.SetPopulation}, ${state.Population})">
                     Restart Simulation
-                </button>
-                <button onclick="$(${Action.WriteParams})">
-                    Save Parameters to URL
                 </button>
             </div>
         </div>
