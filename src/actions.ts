@@ -4,8 +4,9 @@ import {scene_stage} from "./scenes/sce_stage.js";
 
 export const enum Action {
     SetPopulation,
-    SetDistancingRatio,
     SetRecoveryTime,
+    SetMoveSpeed,
+    SetDistancingRatio,
 }
 
 export function dispatch(game: Game, action: Action, args: unknown) {
@@ -14,6 +15,23 @@ export function dispatch(game: Game, action: Action, args: unknown) {
             let population = args as number;
             game.Population = population;
             requestAnimationFrame(() => scene_stage(game));
+            break;
+        }
+        case Action.SetRecoveryTime: {
+            let time = args as number;
+            game.RecoveryTime = time;
+            break;
+        }
+        case Action.SetMoveSpeed: {
+            let speed = args as number;
+            game.MoveSpeed = speed;
+            requestAnimationFrame(() => {
+                for (let e = 0; e < game.World.Mask.length; e++) {
+                    if (game.World.Move[e]) {
+                        game.World.Move[e].Speed = game.MoveSpeed;
+                    }
+                }
+            });
             break;
         }
         case Action.SetDistancingRatio: {
@@ -31,11 +49,6 @@ export function dispatch(game: Game, action: Action, args: unknown) {
                     }
                 }
             });
-            break;
-        }
-        case Action.SetRecoveryTime: {
-            let time = args as number;
-            game.RecoveryTime = time;
             break;
         }
     }

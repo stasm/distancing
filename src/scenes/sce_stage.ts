@@ -19,14 +19,14 @@ export function scene_stage(game: Game) {
         instantiate(game, {
             Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
             Rotation: float(0, Math.PI * 2),
-            Using: [draw_circle(3), collide(3), move(50), bounce(), wander(), health()],
+            Using: [draw_circle(3), collide(3), move(game.MoveSpeed), bounce(), wander(), health()],
         });
     }
 
     let patient0 = instantiate(game, {
         Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
         Rotation: float(0, Math.PI * 2),
-        Using: [draw_circle(3), collide(3), move(50), bounce(), wander(), health()],
+        Using: [draw_circle(3), collide(3), move(game.MoveSpeed), bounce(), wander(), health()],
     });
     game.World.Health[patient0].State = "infected";
     game.World.Draw[patient0].Color = game.ColorInfected;
