@@ -760,10 +760,10 @@ this.ColorRecovered = "#9582dd";
 this.Statistics = [];
 this.State = { ...SimulationParams };
 document.addEventListener("visibilitychange", () => document.hidden ? loop_stop() : loop_start(this));
-this.CanvasScene.width = this.CanvasScene.clientWidth;
-this.CanvasScene.height = this.CanvasScene.clientHeight;
-this.CanvasHisto.width = this.CanvasHisto.clientWidth;
-this.CanvasHisto.height = this.CanvasHisto.clientHeight;
+this.CanvasHisto.width = 800;
+this.CanvasHisto.height = 100;
+this.CanvasScene.width = 800;
+this.CanvasScene.height = 600;
 read_from_url(this.State);
 }
 FrameUpdate(delta) {
