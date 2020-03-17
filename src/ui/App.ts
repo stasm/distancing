@@ -17,6 +17,9 @@ export function App(state: State) {
                 <button onclick="$(${Action.SetPopulation}, ${state.Population})">
                     Restart Simulation
                 </button>
+                <button onclick="$(${Action.Reset})">
+                    Reset Parameters
+                </button>
             </div>
         </div>
     `;

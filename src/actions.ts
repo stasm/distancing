@@ -4,13 +4,14 @@ import {Game} from "./game.js";
 import {SimulationParams, write_to_url} from "./params.js";
 import {scene_stage} from "./scenes/sce_stage.js";
 
-export type State = SimulationParams;
+export type State = typeof SimulationParams;
 export const enum Action {
     SetPopulation,
     SetDotRadius,
     SetRecoveryTime,
     SetMoveSpeed,
     SetDistancing,
+    Reset,
 }
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
@@ -43,6 +44,11 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             write_to_url(game.State);
             requestAnimationFrame(() => set_all_distancing(game));
             break;
+        }
+        case Action.Reset: {
+            game.State = {...SimulationParams};
+            write_to_url(game.State);
+            requestAnimationFrame(() => scene_stage(game));
         }
     }
 }

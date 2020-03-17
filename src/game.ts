@@ -1,3 +1,4 @@
+import {State} from "./actions.js";
 import {loop_start, loop_stop} from "./core.js";
 import {read_from_url, SimulationParams} from "./params.js";
 import {sys_bounce} from "./systems/sys_bounce.js";
@@ -30,13 +31,7 @@ export class Game {
     ColorRecovered = "#9582dd";
 
     Statistics: Array<[number, number, number]> = [];
-    State: SimulationParams = {
-        Population: 500,
-        DotRadius: 3,
-        RecoveryTime: 15,
-        MoveSpeed: 50,
-        Distancing: 0.0,
-    };
+    State: State = {...SimulationParams};
 
     constructor() {
         document.addEventListener("visibilitychange", () =>

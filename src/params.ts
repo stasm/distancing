@@ -1,14 +1,14 @@
 import {clamp} from "../common/number.js";
 
-export interface SimulationParams {
-    Population: number;
-    DotRadius: number;
-    RecoveryTime: number;
-    MoveSpeed: number;
-    Distancing: number;
-}
+export const SimulationParams = {
+    Population: 500,
+    DotRadius: 3,
+    RecoveryTime: 15,
+    MoveSpeed: 50,
+    Distancing: 0.0,
+};
 
-export function read_from_url(params: SimulationParams) {
+export function read_from_url(params: typeof SimulationParams) {
     let search = new URL(document.location.href).searchParams;
     let value;
 
@@ -53,7 +53,7 @@ export function read_from_url(params: SimulationParams) {
     }
 }
 
-export function write_to_url(params: SimulationParams) {
+export function write_to_url(params: typeof SimulationParams) {
     let url = new URL(document.location.href);
     url.searchParams.set("Population", params.Population.toString());
     url.searchParams.set("DotRadius", params.DotRadius.toString());
