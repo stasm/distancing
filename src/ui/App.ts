@@ -1,6 +1,7 @@
 import {Action} from "../actions.js";
 import {Game} from "../game.js";
 import {DistancingRatio} from "./DistancingRatio.js";
+import {DotRadius} from "./DotRadius.js";
 import {html} from "./html.js";
 import {MoveSpeed} from "./MoveSpeed.js";
 import {Population} from "./Population.js";
@@ -17,7 +18,7 @@ export function App(game: Game) {
             "
         >
             <div style="flex: 1; display: flex; flex-wrap: wrap;">
-                ${Population(game)} ${RecoveryTime(game)} ${MoveSpeed(game)}
+                ${Population(game)} ${DotRadius(game)} ${RecoveryTime(game)} ${MoveSpeed(game)}
                 ${DistancingRatio(game)}
             </div>
             <button onclick="$(${Action.SetPopulation}, ${game.Population})">

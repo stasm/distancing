@@ -29,6 +29,7 @@ export class Game {
     ColorRecovered = "#9582dd";
 
     Population = 500;
+    DotRadius = 3;
     RecoveryTime = 15;
     MoveSpeed = 50;
     DistancingRatio = 0.0;

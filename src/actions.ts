@@ -4,6 +4,7 @@ import {scene_stage} from "./scenes/sce_stage.js";
 
 export const enum Action {
     SetPopulation,
+    SetDotRadius,
     SetRecoveryTime,
     SetMoveSpeed,
     SetDistancingRatio,
@@ -15,6 +16,21 @@ export function dispatch(game: Game, action: Action, args: unknown) {
             let population = args as number;
             game.Population = population;
             requestAnimationFrame(() => scene_stage(game));
+            break;
+        }
+        case Action.SetDotRadius: {
+            let radius = args as number;
+            game.DotRadius = radius;
+            requestAnimationFrame(() => {
+                for (let e = 0; e < game.World.Mask.length; e++) {
+                    if (game.World.Mask[e] & Has.Draw) {
+                        game.World.Draw[e].Radius = game.DotRadius;
+                    }
+                    if (game.World.Mask[e] & Has.Collide) {
+                        game.World.Collide[e].Radius = game.DotRadius;
+                    }
+                }
+            });
             break;
         }
         case Action.SetRecoveryTime: {
