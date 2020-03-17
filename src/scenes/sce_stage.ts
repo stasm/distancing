@@ -18,7 +18,7 @@ export function scene_stage(game: Game) {
     game.World.Health[patient0].State = "infected";
     game.World.Draw[patient0].Color = game.ColorInfected;
 
-    for (let e = 0; e < game.Population * game.DistancingRatio; e++) {
+    for (let e = 0; e < game.Population * game.Distancing; e++) {
         if (game.World.Mask[e] & Has.Bounce) {
             game.World.Mask[e] &= ~Has.Move;
         }

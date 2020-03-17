@@ -1,5 +1,6 @@
 import {Has} from "./components/com_index.js";
 import {Game} from "./game.js";
+import {params_write} from "./params.js";
 import {scene_stage} from "./scenes/sce_stage.js";
 
 export const enum Action {
@@ -7,7 +8,8 @@ export const enum Action {
     SetDotRadius,
     SetRecoveryTime,
     SetMoveSpeed,
-    SetDistancingRatio,
+    SetDistancing,
+    WriteParams,
 }
 
 export function dispatch(game: Game, action: Action, args: unknown) {
@@ -50,10 +52,10 @@ export function dispatch(game: Game, action: Action, args: unknown) {
             });
             break;
         }
-        case Action.SetDistancingRatio: {
+        case Action.SetDistancing: {
             let ratio = args as number;
-            game.DistancingRatio = ratio;
-            let partition_index = game.Population * game.DistancingRatio;
+            game.Distancing = ratio;
+            let partition_index = game.Population * game.Distancing;
             requestAnimationFrame(() => {
                 for (let e = 0; e < game.World.Mask.length; e++) {
                     if (game.World.Mask[e] & Has.Bounce) {
@@ -66,6 +68,10 @@ export function dispatch(game: Game, action: Action, args: unknown) {
                 }
             });
             break;
+        }
+        case Action.WriteParams: {
+            let url = params_write(game);
+            history.pushState({}, "Distancing", "?" + url.searchParams.toString());
         }
     }
 }

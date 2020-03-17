@@ -18,6 +18,9 @@ export function App(game: Game) {
                 <button onclick="$(${Action.SetPopulation}, ${game.Population})">
                     Restart Simulation
                 </button>
+                <button onclick="$(${Action.WriteParams})">
+                    Save Parameters to URL
+                </button>
             </div>
         </div>
     `;

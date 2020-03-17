@@ -1,4 +1,5 @@
 import {loop_start, loop_stop} from "./core.js";
+import {params_read, SimulationParams} from "./params.js";
 import {sys_bounce} from "./systems/sys_bounce.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_draw_histogram} from "./systems/sys_draw_histogram.js";
@@ -14,7 +15,7 @@ import {World} from "./world.js";
 
 export type Entity = number;
 
-export class Game {
+export class Game implements SimulationParams {
     World = new World();
 
     UI = document.querySelector("#controls")!;
@@ -32,7 +33,7 @@ export class Game {
     DotRadius = 3;
     RecoveryTime = 15;
     MoveSpeed = 50;
-    DistancingRatio = 0.0;
+    Distancing = 0.0;
     Statistics: Array<[number, number, number]> = [];
 
     constructor() {
@@ -44,6 +45,8 @@ export class Game {
         this.CanvasScene.height = this.CanvasScene.clientHeight;
         this.CanvasHisto.width = this.CanvasHisto.clientWidth;
         this.CanvasHisto.height = this.CanvasHisto.clientHeight;
+
+        params_read(this);
     }
 
     FrameUpdate(delta: number) {

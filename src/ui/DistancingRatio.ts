@@ -6,15 +6,15 @@ export function DistancingRatio(game: Game) {
     return html`
         <label>
             <span>
-                Distancing: ${Math.round(game.DistancingRatio * 100)}%
+                Distancing: ${Math.round(game.Distancing * 100)}%
             </span>
             <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.01"
-                value="${game.DistancingRatio}"
-                onchange="$(${Action.SetDistancingRatio}, parseFloat(this.value))"
+                value="${game.Distancing}"
+                onchange="$(${Action.SetDistancing}, parseFloat(this.value))"
             />
         </label>
     `;
