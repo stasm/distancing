@@ -1,6 +1,70 @@
 (function () {
     'use strict';
 
+    function clamp(n, min, max) {
+        if (n < min)
+            return min;
+        if (n > max)
+            return max;
+        return n;
+    }
+
+    const SimulationParams = {
+        Population: 500,
+        DotRadius: 3,
+        RecoveryTime: 15,
+        MoveSpeed: 50,
+        Distancing: 0.0,
+    };
+    function read_from_url(params) {
+        let search = new URL(document.location.href).searchParams;
+        let value;
+        value = search.get("Population");
+        if (value !== null) {
+            value = parseInt(value);
+            if (!Number.isNaN(value)) {
+                params.Population = clamp(value, 1, 1000);
+            }
+        }
+        value = search.get("DotRadius");
+        if (value !== null) {
+            value = parseInt(value);
+            if (!Number.isNaN(value)) {
+                params.DotRadius = clamp(value, 1, 10);
+            }
+        }
+        value = search.get("RecoveryTime");
+        if (value !== null) {
+            value = parseInt(value);
+            if (!Number.isNaN(value)) {
+                params.RecoveryTime = clamp(value, 1, 30);
+            }
+        }
+        value = search.get("MoveSpeed");
+        if (value !== null) {
+            value = parseInt(value);
+            if (!Number.isNaN(value)) {
+                params.MoveSpeed = clamp(value, 1, 100);
+            }
+        }
+        value = search.get("Distancing");
+        if (value !== null) {
+            value = parseInt(value);
+            if (!Number.isNaN(value)) {
+                params.Distancing = clamp(value, 0, 1);
+            }
+        }
+    }
+    function write_to_url(params) {
+        let url = new URL(document.location.href);
+        url.searchParams.set("Population", params.Population.toString());
+        url.searchParams.set("DotRadius", params.DotRadius.toString());
+        url.searchParams.set("RecoveryTime", params.RecoveryTime.toString());
+        url.searchParams.set("MoveSpeed", params.MoveSpeed.toString());
+        url.searchParams.set("Distancing", (params.Distancing * 100).toFixed(0));
+        history.replaceState(params, "Distancing", "?" + url.searchParams.toString());
+    }
+
     let seed = 1;
     function set_seed(new_seed) {
         seed = 198706 * new_seed;
@@ -64,6 +128,21 @@
     function wander() {
         return (game, entity) => {
             game.World.Mask[entity] |= 64 /* Wander */;
+        };
+    }
+
+    function blu_dot(game) {
+        return {
+            Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
+            Rotation: float(0, Math.PI * 2),
+            Using: [
+                draw_circle(game.State.DotRadius),
+                collide(game.State.DotRadius),
+                move(game.State.MoveSpeed),
+                bounce(),
+                wander(),
+                health(),
+            ],
         };
     }
 
@@ -209,57 +288,84 @@
         game.World = new World();
         game.Statistics = [];
         set_seed(Date.now());
-        for (let i = 0; i < game.Population - 1; i++) {
-            instantiate(game, {
-                Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
-                Rotation: float(0, Math.PI * 2),
-                Using: [draw_circle(3), collide(3), move(50), bounce(), wander(), health()],
-            });
+        for (let i = 0; i < game.State.Population - 1; i++) {
+            instantiate(game, blu_dot(game));
         }
-        let patient0 = instantiate(game, {
-            Translation: [float(0, game.CanvasScene.width), float(0, game.CanvasScene.height)],
-            Rotation: float(0, Math.PI * 2),
-            Using: [draw_circle(3), collide(3), move(50), bounce(), wander(), health()],
-        });
+        let patient0 = instantiate(game, blu_dot(game));
         game.World.Health[patient0].State = "infected";
         game.World.Draw[patient0].Color = game.ColorInfected;
-        for (let e = 0; e < game.Population * game.DistancingRatio; e++) {
+        for (let e = 0; e < game.State.Population * game.State.Distancing; e++) {
             if (game.World.Mask[e] & 1 /* Bounce */) {
                 game.World.Mask[e] &= ~16 /* Move */;
             }
         }
     }
 
-    function dispatch(game, action, args) {
+    function dispatch(game, action, payload) {
         switch (action) {
             case 0 /* SetPopulation */: {
-                let population = args;
-                game.Population = population;
+                game.State.Population = clamp(payload, 1, 1000);
+                write_to_url(game.State);
                 requestAnimationFrame(() => scene_stage(game));
                 break;
             }
-            case 1 /* SetDistancingRatio */: {
-                let ratio = args;
-                game.DistancingRatio = ratio;
-                let partition_index = game.Population * game.DistancingRatio;
-                requestAnimationFrame(() => {
-                    for (let e = 0; e < game.World.Mask.length; e++) {
-                        if (game.World.Mask[e] & 1 /* Bounce */) {
-                            if (e < partition_index) {
-                                game.World.Mask[e] &= ~16 /* Move */;
-                            }
-                            else {
-                                game.World.Mask[e] |= 16 /* Move */;
-                            }
-                        }
-                    }
-                });
+            case 1 /* SetDotRadius */: {
+                game.State.DotRadius = clamp(payload, 1, 10);
+                write_to_url(game.State);
+                requestAnimationFrame(() => set_all_dot_radius(game));
                 break;
             }
             case 2 /* SetRecoveryTime */: {
-                let time = args;
-                game.RecoveryTime = time;
+                game.State.RecoveryTime = clamp(payload, 1, 30);
+                write_to_url(game.State);
                 break;
+            }
+            case 3 /* SetMoveSpeed */: {
+                game.State.MoveSpeed = clamp(payload, 1, 100);
+                write_to_url(game.State);
+                requestAnimationFrame(() => set_all_move_speed(game));
+                break;
+            }
+            case 4 /* SetDistancing */: {
+                game.State.Distancing = clamp(payload, 0, 1);
+                write_to_url(game.State);
+                requestAnimationFrame(() => set_all_distancing(game));
+                break;
+            }
+            case 5 /* Reset */: {
+                game.State = { ...SimulationParams };
+                write_to_url(game.State);
+                requestAnimationFrame(() => scene_stage(game));
+            }
+        }
+    }
+    function set_all_dot_radius(game) {
+        for (let e = 0; e < game.World.Mask.length; e++) {
+            if (game.World.Mask[e] & 4 /* Draw */) {
+                game.World.Draw[e].Radius = game.State.DotRadius;
+            }
+            if (game.World.Mask[e] & 2 /* Collide */) {
+                game.World.Collide[e].Radius = game.State.DotRadius;
+            }
+        }
+    }
+    function set_all_move_speed(game) {
+        for (let e = 0; e < game.World.Mask.length; e++) {
+            if (game.World.Move[e]) {
+                game.World.Move[e].Speed = game.State.MoveSpeed;
+            }
+        }
+    }
+    function set_all_distancing(game) {
+        let partition_index = game.State.Population * game.State.Distancing;
+        for (let e = 0; e < game.World.Mask.length; e++) {
+            if (game.World.Mask[e] & 1 /* Bounce */) {
+                if (e < partition_index) {
+                    game.World.Mask[e] &= ~16 /* Move */;
+                }
+                else {
+                    game.World.Mask[e] |= 16 /* Move */;
+                }
             }
         }
     }
@@ -335,13 +441,12 @@
 
     let w = 1;
     function sys_draw_histogram(game, delta) {
-        game.ContextHisto.fillStyle = "#f8f8f8";
-        game.ContextHisto.fillRect(0, 0, game.CanvasHisto.width, game.CanvasHisto.height);
+        game.ContextHisto.clearRect(0, 0, game.CanvasHisto.width, game.CanvasHisto.height);
         for (let i = 0; i < game.Statistics.length; i++) {
             let count = game.Statistics[i];
-            let vulnerable = (count[0] / game.Population) * game.CanvasHisto.height;
-            let infected = (count[1] / game.Population) * game.CanvasHisto.height;
-            let recovered = (count[2] / game.Population) * game.CanvasHisto.height;
+            let vulnerable = (count[0] / game.State.Population) * game.CanvasHisto.height;
+            let infected = (count[1] / game.State.Population) * game.CanvasHisto.height;
+            let recovered = (count[2] / game.State.Population) * game.CanvasHisto.height;
             game.ContextHisto.fillStyle = game.ColorRecovered;
             game.ContextHisto.fillRect(i * w, 0, w, recovered);
             game.ContextHisto.fillStyle = game.ColorVulnerable;
@@ -404,7 +509,7 @@
         let health = game.World.Health[entity];
         if (health.State === "infected") {
             health.SinceInfection += delta;
-            if (health.SinceInfection > game.RecoveryTime) {
+            if (health.SinceInfection > game.State.RecoveryTime) {
                 health.State = "recovered";
                 game.World.Draw[entity].Color = game.ColorRecovered;
                 game.World.Mask[entity] &= ~2 /* Collide */;
@@ -512,78 +617,114 @@
         return strings.reduce((out, cur) => out + shift(values) + cur);
     }
 
-    function DistancingRatio(game) {
+    function DistancingRatio(state) {
         return html `
-        <label style="display: flex; align-items: center; margin-right: 30px;">
-            Distancing: ${Math.round(game.DistancingRatio * 100)}%
+        <label>
+            <span>
+                Distancing: ${Math.round(state.Distancing * 100)}%
+            </span>
             <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.01"
-                value="${game.DistancingRatio}"
-                onchange="$(${1 /* SetDistancingRatio */}, parseFloat(this.value))"
-                style="margin-left: 10px;"
+                value="${state.Distancing}"
+                onchange="$(${4 /* SetDistancing */}, parseFloat(this.value))"
             />
         </label>
     `;
     }
 
-    function Population(game) {
+    function DotRadius(state) {
         return html `
-        <label style="display: flex; align-items: center; margin-right: 30px;">
-            Population: ${game.Population}
+        <label>
+            <span>
+                Dot Radius: ${state.DotRadius}px
+            </span>
+            <input
+                type="range"
+                min="1"
+                max="10"
+                value="${state.DotRadius}"
+                onchange="$(${1 /* SetDotRadius */}, parseFloat(this.value))"
+            />
+        </label>
+    `;
+    }
+
+    function MoveSpeed(state) {
+        return html `
+        <label>
+            <span>
+                Movement: ${state.MoveSpeed}px/s
+            </span>
+            <input
+                type="range"
+                min="1"
+                max="100"
+                value="${state.MoveSpeed}"
+                onchange="$(${3 /* SetMoveSpeed */}, parseFloat(this.value))"
+            />
+        </label>
+    `;
+    }
+
+    function Population(state) {
+        return html `
+        <label>
+            <span>
+                Population: ${state.Population}
+            </span>
             <input
                 type="range"
                 min="1"
                 max="1000"
-                value="${game.Population}"
+                value="${state.Population}"
                 onchange="$(${0 /* SetPopulation */}, parseInt(this.value))"
-                style="margin-left: 10px;"
             />
         </label>
     `;
     }
 
-    function RecoveryTime(game) {
+    function RecoveryTime(state) {
         return html `
-        <label style="display: flex; align-items: center; margin-right: 30px;">
-            Recovery Time: ${game.RecoveryTime}s
+        <label>
+            <span>
+                Recovery Time: ${state.RecoveryTime}s
+            </span>
             <input
                 type="range"
                 min="1"
                 max="30"
-                value="${game.RecoveryTime}"
+                value="${state.RecoveryTime}"
                 onchange="$(${2 /* SetRecoveryTime */}, parseInt(this.value))"
-                style="margin-left: 10px;"
             />
         </label>
     `;
     }
 
-    function App(game) {
+    function App(state) {
         return html `
-        <div
-            style="
-                display: flex;
-                justify-content: space-between;
-                padding: 5px;
-                font: 13px Arial, sans-serif;
-            "
-        >
-            <div style="flex: 1; display: flex; flex-wrap: wrap;">
-                ${Population(game)} ${RecoveryTime(game)} ${DistancingRatio(game)}
+        <div>
+            <div>
+                ${Population(state)} ${DotRadius(state)} ${RecoveryTime(state)} ${MoveSpeed(state)}
+                ${DistancingRatio(state)}
             </div>
-            <button onclick="$(${0 /* SetPopulation */}, ${game.Population})">
-                Restart
-            </button>
+            <div style="margin-top: 20px;">
+                <button onclick="$(${0 /* SetPopulation */}, ${state.Population})">
+                    Restart Simulation
+                </button>
+                <button onclick="$(${5 /* Reset */})">
+                    Reset Parameters
+                </button>
+            </div>
         </div>
     `;
     }
 
     let prev;
     function sys_ui(game, delta) {
-        let next = App(game);
+        let next = App(game.State);
         if (next !== prev) {
             game.UI.innerHTML = prev = next;
         }
@@ -607,24 +748,23 @@
     class Game {
         constructor() {
             this.World = new World();
-            this.UI = document.querySelector("nav");
+            this.UI = document.querySelector("#controls");
             this.CanvasScene = document.querySelector("canvas#scene");
             this.ContextScene = this.CanvasScene.getContext("2d");
             this.CanvasHisto = document.querySelector("canvas#histo");
             this.ContextHisto = this.CanvasHisto.getContext("2d");
             this.ClearColor = "#e2ddc3";
-            this.ColorVulnerable = "#fff";
+            this.ColorVulnerable = "#fafafa";
             this.ColorInfected = "#ce6a12";
             this.ColorRecovered = "#9582dd";
-            this.Population = 500;
-            this.DistancingRatio = 0.0;
-            this.RecoveryTime = 15;
             this.Statistics = [];
+            this.State = { ...SimulationParams };
             document.addEventListener("visibilitychange", () => document.hidden ? loop_stop() : loop_start(this));
             this.CanvasScene.width = this.CanvasScene.clientWidth;
             this.CanvasScene.height = this.CanvasScene.clientHeight;
             this.CanvasHisto.width = this.CanvasHisto.clientWidth;
             this.CanvasHisto.height = this.CanvasHisto.clientHeight;
+            read_from_url(this.State);
         }
         FrameUpdate(delta) {
             let now = performance.now();
