@@ -2,30 +2,8 @@
 <meta charset="utf8" />
 <meta name="viewport" content="width=device-width, user-scalable=0" />
 <title>Distancing</title>
+<link rel="stylesheet" href="play/style.css" />
 <style>
-    html,
-    body {
-        overflow: hidden;
-        margin: 0;
-    }
-    main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    nav {
-        width: 100vw;
-    }
-    canvas#histo {
-        width: 800px;
-        height: 100px;
-        margin: 20px 0 0;
-    }
-    canvas#scene {
-        width: 800px;
-        height: 600px;
-        margin: 20px;
-    }
     #debug {
         display: flex;
         flex-flow: column nowrap;
@@ -51,11 +29,13 @@
     }
 </style>
 <body>
-    <main>
-        <nav></nav>
-        <canvas id="histo"></canvas>
-        <canvas id="scene"></canvas>
-    </main>
+    <div id="simulation">
+        <div id="controls"></div>
+        <div id="drawings">
+            <canvas id="histo"></canvas>
+            <canvas id="scene"></canvas>
+        </div>
+    </div>
 
     <div id="debug">
         <div>update: <span id="update"></span></div>

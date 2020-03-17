@@ -17,7 +17,7 @@ export type Entity = number;
 export class Game {
     World = new World();
 
-    UI = document.querySelector("nav")!;
+    UI = document.querySelector("#controls")!;
     CanvasScene = document.querySelector("canvas#scene")! as HTMLCanvasElement;
     ContextScene = this.CanvasScene.getContext("2d")!;
     CanvasHisto = document.querySelector("canvas#histo")! as HTMLCanvasElement;

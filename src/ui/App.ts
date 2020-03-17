@@ -9,21 +9,16 @@ import {RecoveryTime} from "./RecoveryTime.js";
 
 export function App(game: Game) {
     return html`
-        <div
-            style="
-                display: flex;
-                justify-content: space-between;
-                padding: 5px;
-                font: 13px Arial, sans-serif;
-            "
-        >
-            <div style="flex: 1; display: flex; flex-wrap: wrap;">
+        <div>
+            <div>
                 ${Population(game)} ${DotRadius(game)} ${RecoveryTime(game)} ${MoveSpeed(game)}
                 ${DistancingRatio(game)}
             </div>
-            <button onclick="$(${Action.SetPopulation}, ${game.Population})">
-                Restart
-            </button>
+            <div style="margin-top: 20px;">
+                <button onclick="$(${Action.SetPopulation}, ${game.Population})">
+                    Restart Simulation
+                </button>
+            </div>
         </div>
     `;
 }

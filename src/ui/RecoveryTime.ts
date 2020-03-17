@@ -4,15 +4,16 @@ import {html} from "./html.js";
 
 export function RecoveryTime(game: Game) {
     return html`
-        <label style="display: flex; align-items: center; margin-right: 30px;">
-            Recovery Time: ${game.RecoveryTime}s
+        <label>
+            <span>
+                Recovery Time: ${game.RecoveryTime}s
+            </span>
             <input
                 type="range"
                 min="1"
                 max="30"
                 value="${game.RecoveryTime}"
                 onchange="$(${Action.SetRecoveryTime}, parseInt(this.value))"
-                style="margin-left: 10px;"
             />
         </label>
     `;
