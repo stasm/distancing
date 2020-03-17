@@ -26,7 +26,7 @@ export class Game {
     ContextHisto = this.CanvasHisto.getContext("2d")!;
 
     ClearColor = "#e2ddc3";
-    ColorVulnerable = "#fff";
+    ColorVulnerable = "#fafafa";
     ColorInfected = "#ce6a12";
     ColorRecovered = "#9582dd";
 
